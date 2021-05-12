@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div>
+
+    <p>你的年龄现在: <input id="result" /></p>
+</div>
+<script>
+    let model = {
+        age: 18
+    };
+    document.getElementById("result").value = model.age;
+    // 注意: 在input输入框中, 修改值, 并不会影响model数据的同步改变
+</script>
+</body>
+</html>

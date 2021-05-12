@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js">
+    </script>
+</head>
+
+<body>
+    <input type="file" id="myFile">
+    <button onclick="btn()">单文件上传</button>
+    <script>
+        function btn() {
+            let reader = new FileReader(); // 专门读取文件(可以转成base64字符串)
+            let file = document.getElementById("myFile").files[0];
+            // Blob是File的父类 
+            reader.readAsDataURL(file); // File -> Base64
+            // reader.readAsBinaryString(file); // File -> 二进制数据
+            // reader.readAsText(file); // File -> Text
+            reader.onload = function (res) {
+                console.log(res.target.result.length);
+                
+                // $.ajax({
+                //     url: "/uploadOneFile_base64",
+                //     type: "POST",
+                //     data: {
+                //         imgStr: res.target.result
+                //     }
+                // })
+            }
+        }
+    </script>
+</body>
+
+</html>

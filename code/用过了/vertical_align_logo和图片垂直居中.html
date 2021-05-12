@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>vertical-align</title>
+    <style>
+        .my_div{
+            border: 1px solid gray;
+            height: 100px;
+        }
+        .my_div img:first-of-type{
+            border: 1px solid black;
+            vertical-align: middle;
+        }
+        .my_div span{
+            font-size: 16px;
+            display: inline-block;
+            border: 1px solid black;
+            /*line-height: 1; !*重要, 不然默认normal是1.2倍行间距, 影响找线*!*/
+        }
+        .span1{
+            border: 1px solid red;
+        }
+        .biao{
+            height: 100%;
+            width: 1px;
+            vertical-align: middle;
+        }
+
+    </style>
+</head>
+<body>
+<div class="my_div">
+    xx
+    <img src="hello.png"/>
+    <span class="span1">我爱logo</span>
+    <span class="biao"></span>
+</div>
+</body>
+</html>

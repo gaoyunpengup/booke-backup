@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>多文件上传_单进度</title>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js">
+    </script>
+    <style>
+        .img_box:after {
+            content: " ";
+            display: block;
+            clear: both;
+        }
+
+        .item {
+            width: 300px;
+            border: 1px solid black;
+            float: left;
+        }
+
+        .progress_wrap {
+            border: 1px solid black;
+            width: 300px;
+            height: 20px;
+        }
+
+        .progress {
+            height: 100%;
+            width: 0;
+            background-color: red;
+        }
+
+        .success {
+            background-color: greenyellow !important;
+        }
+
+        .the_img {
+            width: 100%;
+            height: 200px;
+        }
+    </style>
+</head>
+
+<body>
+    <input type="file" id="myFile" multiple>
+    <button onclick="btn()">多文件上传</button>
+    <div class="img_box"></div>
+    <script>
+        // 1. 选择完文件, 先在前端预览
+        // 2. 点击上传按钮, 才开始上传
+        let willUploadFileArr = []; // 将要上传的文件对象 数组
+        let imgBoxDiv = document.getElementsByClassName("img_box")[0];
+        document.getElementById("myFile").addEventListener("change",
+            function () {
+                let fileArr = document.getElementById("myFile").files;
+                for (let i = 0; i < fileArr.length; i++) {
+                    let f = fileArr[i]; //先预览图片
+                    let item = document.createElement("div");
+                    let progressWrap = document.createElement('div');
+                    let img = document.createElement('img');
+                    let progress = document.createElement('div');
+                    let btn = document.createElement("button");
+                    btn.innerHTML = "暂停/开始";
+                    item.className = "item";
+                    img.className = "the_img";
+                    progressWrap.className = 'progress_wrap';
+                    progress.className = "progress";
+                    img.src = window.URL.createObjectURL(f);
+                    img.onload = function () {
+                        //显示要是否这块儿内存
+                        window.URL.revokeObjectURL(this.src);
+                    }
+                    item.appendChild(img);
+                    item.appendChild(progressWrap);
+                    progressWrap.appendChild(progress);
+                    item.appendChild(btn);
+                    imgBoxDiv.appendChild(item);
+
+                    willUploadFileArr.push({
+                        file: f,
+                        item,
+                        progress
+                    });
+                }
+            })
+        // 开始上传的方法 (每一个文件, 触发一次)
+        function btn() {
+            willUploadFileArr.map(obj => {
+                let formData = new FormData();
+                formData.append("image", obj.file);
+                $.ajax({
+                    url: "/uploadManyFile",
+                    type: "POST",
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    xhr: function () { // 可以增强当前Ajax
+                        let xhr = new XMLHttpRequest();
+                        xhr.upload.onprogress = function(){
+                            updateProgress(obj.item, obj.progress);
+                        }; // 接收上传过程的开始周期触发
+                        return xhr; // 一定要返回当前Ajax对象
+                    }
+                })
+            })
+
+        }
+
+        function updateProgress(item, progress) {
+            if (event
+                .lengthComputable
+                ) { // 只读属性是一个布尔Boolean 标志，表示ProgressEvent 所关联的资源是否具有可以计算的长度。
+                var completedPercent = (event.loaded / event.total * 100)
+                    .toFixed(2); // loaded已经传输字节数, total总字节数
+                progress.style.width = completedPercent + '%';
+                progress.innerHTML = completedPercent + '%';
+                if (completedPercent > 90) { //进度条变色
+                    progress.classList.add('success');
+                }
+            }
+        }
+    </script>
+</body>
+
+</html>

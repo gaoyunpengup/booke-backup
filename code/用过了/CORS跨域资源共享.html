@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>跨域资源共享</title>
+</head>
+<body>
+<script>
+    let ajaxObj = new XMLHttpRequest();
+    ajaxObj.open("put", "http://localhost:9090/api");
+    // ajaxObj.withCredentials = true; // 允许浏览器携带cookie跨域
+    // ajaxObj.open("get", "http://c.m.163.com/nc/article/headline/T1348647853363/0-20.html");
+    ajaxObj.send();
+    ajaxObj.onreadystatechange = function(){
+        if (ajaxObj.status === 200 && ajaxObj.readyState === 4) {
+            console.log(ajaxObj.responseText);
+        }
+    }
+    //
+    // if (数组变量.length === 0) { // 写在网页刚刷新执行的代码地方
+    //     // 证明刷新进来的
+    //     数组变量 = JSON.prase(localStorage['a']);
+    // }
+    //
+    // // 点击选中新的了.
+    // 方法函数 () {
+    //     // 把最新的数组, 更新到localStorage里
+    //     localStorage['a'] = JSON.stringfy(数组变量)
+    // }
+</script>
+</body>
+</html>

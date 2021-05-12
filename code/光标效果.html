@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>光标效果</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+        }
+
+        img {
+            width: 200px;
+            height: 200px;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- 注意这里不要用内容, 会影响取值 -->
+    <div id="result"></div>
+    <div id="scriptResult"></div>
+    <div id="main" class="main"></div>
+    <script type="text/javascript">
+        startTypeWriter("<style>body{background-color: #C7EDCC;}</style><div>哈哈哈</div><img src='./good.jpg'/><script>document.body.style.fontSize = '24px';document.body.style.color='red';<\/script>");
+
+        function startTypeWriter(targetStr = "") {
+            let ind = 0; 
+            let isShowLtG = false;
+            let ltStartInd = 0; // 标签开始的位置
+            let t = setInterval(() => {
+                var currentStr = targetStr[ind];
+                let nowMainStr = document.getElementById("main").innerHTML; 
+                let g = (ind & 1 ? '_' : "");
+                if (g !== "_") {
+                    nowMainStr = nowMainStr.substr(0, nowMainStr
+                        .length - 1
+                        );
+                    nowMainStr += currentStr;
+                } else {
+                    nowMainStr += currentStr + "_";
+                }
+                document.getElementById("main").innerHTML = nowMainStr; 
+
+                currentStr === "<" && targetStr[ind + 1] !== "/" && (ltStartInd = ind);
+                // 下面是判断当前标签是否结束
+                (currentStr === "/" && targetStr[ind - 1] === "<") && (isShowLtG = true)
+                
+                if (isShowLtG & currentStr === ">") {
+                    isShowLtG = false;
+                    if (targetStr.substr(ind - 6, 6) !== "script"){
+                        document.getElementById("result").innerHTML = targetStr.substring(0, ind);
+                        document.getElementById("main").innerHTML = "";
+                    } else {
+                        // 执行js的代码
+                        let s = document.createElement("script");
+                        document.getElementById("main").innerHTML = "";
+                        s.text = targetStr.substring(ltStartInd, ind + 1).replace("<script>", "").replace("<\/script>", "");
+                        document.getElementById("scriptResult").appendChild(s);
+                    }
+                }
+                if (targetStr[ind - 1] === "/" && currentStr ===
+                    ">") {
+                    document.getElementById("result").innerHTML =
+                    targetStr
+                        .substring(0, ind + 1);
+                    document.getElementById("main").innerHTML = " ";
+                }
+                ++ind >= targetStr.length && clearInterval(t)
+            }, 100); 
+        }
+
+    </script>
+</body>
+
+</html>

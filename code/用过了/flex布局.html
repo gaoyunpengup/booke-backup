@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>flex布局</title>
+    <style>
+        .father{
+            display: flex;
+            width: 400px;
+            justify-content: flex-start;
+            border: 1px solid black;
+        }
+        .father div{
+            border: 1px solid black;
+        }
+        /*1. flex-grow 实验: */
+        /*flex-basic: auto 为剩余空间本身大小, 父级宽度 - 个数*标签本身宽度 / 份数, 大家用原本的宽度加上平分的份数 */
+        /*.father div:nth-child(1){*/
+            /*flex-grow: 1;*/
+        /*}*/
+        /*.father div:nth-child(2){*/
+            /*flex-grow: 2;*/
+        /*}*/
+        /*.father div:nth-child(3){*/
+            /*flex-grow: 1;*/
+        /*}*/
+
+        /*2. flex 评分 实验:*/
+        /*.father div:nth-child(1){*/
+            /*flex: 1;*/
+        /*}*/
+        /*.father div:nth-child(2){*/
+            /*flex: 2;*/
+        /*}*/
+        /*.father div:nth-child(3){*/
+            /*flex: 1;*/
+        /*}*/
+
+        /*3. flex-shrink实验*/
+        /*.father div:nth-child(1){*/
+            /*flex-shrink: 1;*/
+        /*}*/
+        /*.father div:nth-child(2){*/
+            /*flex-shrink: 2;*/
+        /*}*/
+        /*.father div:nth-child(3){*/
+            /*flex-shrink: 1;*/
+        /*}*/
+
+        /*4. order 实验*/
+        /*.father div:nth-child(1){*/
+            /*flex: 1;*/
+            /*order: 4;*/
+        /*}*/
+        /*.father div:nth-child(2){*/
+            /*flex: 2;*/
+            /*order: -3;*/
+        /*}*/
+        /*.father div:nth-child(3){*/
+            /*flex: 1;*/
+            /*order: 1*/
+        /*}*/
+
+
+    </style>
+</head>
+<body>
+<span>原本是</span>
+<div class="father">
+    <div>孙悟空4</div>
+    <div>猪八戒-3</div>
+    <div>沙师弟1</div>
+</div>
+</body>
+</html>

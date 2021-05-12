@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	<script>
+		let arr = [
+			{
+				"id": 1,
+				"text": "大嫂"
+			},
+			{
+				"id": 3,
+				"text": "三嫂"
+			},
+			{
+				"id": 2,
+				"text": "二嫂"
+			}
+		];
+		let brr = [
+			{
+				"id": 1,
+				"age": 30
+			},
+			{
+				"id": 2,
+				"age": 17
+			},
+			{
+				"id": 3,
+				"age": 23
+			}
+		];
+		// 不要改变原始数组, 合并2个数组里的对象(注意id值要对应上, 比如三嫂23岁), 并且要以age排序
+		// 方式1:
+		let resultArr = [];
+		arr.map(oneObj=>{
+			brr.map(twoObj=>{
+				if (oneObj['id'] === twoObj['id']){
+                    resultArr.push(Object.assign({}, oneObj, twoObj));
+				}
+			})
+		});
+		console.log(resultArr.sort((a, b)=>a['age'] - b['age']));
+
+		// 方式2:
+		// let resultArr = [];
+		// arr.map(oneObj => {
+		//     let target = brr.find(twoObj => oneObj['id'] === twoObj['id']);
+		//     resultArr.push(Object.assign({}, oneObj, target));
+		// });
+        // console.log(resultArr.sort((a, b)=>a['age'] - b['age']));
+        //
+		// // 实际上, 上面都是2层循环
+		// // 方式3:
+		let map = new Map();
+		arr.concat(brr).forEach(obj => {
+		    map.set(obj.id, Object.assign(map.get(obj.id) || {}, obj));
+		});
+		console.log(Array.from(map.values()).sort((a, b)=>a['age'] - b['age']));
+
+	</script>
+</body>
+</html>

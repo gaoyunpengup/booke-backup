@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        *{
+            margin: 0;
+        }
+        .wrap::after{
+            content: " ";
+            display: block;
+            clear: both;
+        }
+        .left_div{
+            width: 200px;
+            height: 200px;
+            background-color: red;
+            float: left;
+        }
+        .right_div{
+            background-color: blue;
+            height: 200px;
+            width: 100%;
+            margin-left: 200px; /*这里利用padding-left也可以*/
+            color: white;
+            /*注意这里不能用float*/
+            /*float: left;*/
+        }
+    </style>
+</head>
+<body>
+    <div class="wrap">
+        <div class="left_div">123</div>
+        <div class="right_div">
+            我是内容啊我是内容啊我是内容啊我是内容啊我是内容啊我是内容啊我是内容啊我是内容啊我是内容啊我是内容啊我是内容啊我是内容啊我是内容啊我是内容啊我是内容啊我是内容啊我是内容啊我是内容啊我是内容啊我是内容啊我是内容啊我是内容啊我是内容啊我是内容啊我是内容啊我是内容啊我是内容啊我是内容啊
+        </div>
+    </div>
+</body>
+</html>

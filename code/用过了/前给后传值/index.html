@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js">
+    </script>
+</head>
+
+<body>
+    <!-- form标签提交get方式 -->
+    <!-- <p>get方式:</p>
+    <form action="/get_v1">
+        <div>
+            <span>用户名:</span>
+            <input type="text" name="username">
+        </div>
+        <div>
+            <span>密码:</span>
+            <input type="password" name="pass">
+        </div>
+        <div>
+            <input type="submit" value="提交">
+        </div>
+    </form> -->
+
+
+    <!-- get方式url路径传参 -->
+    <!-- <p>get方式url路径传参</p>
+    <form action="/get_v2/100/book/889">
+        <div>
+            <input type="submit" value="提交">
+        </div>
+    </form> -->
+
+    <!-- <p>post方式: application/x-www-form-urlencoded</p>
+    <form action="/post_v1" method="POST">
+        <div>
+            <span>用户名:</span>
+            <input type="text" name="username">
+        </div>
+        <div>
+            <span>密码:</span>
+            <input type="password" name="pass">
+        </div>
+        <div>
+            <input type="submit" value="提交">
+        </div>
+    </form> -->
+
+    <!-- <p>post方式: multipart/form-data</p>
+    <form action="/post_v3" method="POST" enctype="multipart/form-data">
+        <div>
+            <span>用户名:</span>
+            <input type="text" name="username">
+        </div>
+        <div>
+            <span>密码:</span>
+            <input type="password" name="pass">
+        </div>
+        <div>
+            <input type="submit" value="提交">
+        </div>
+    </form>  -->
+
+    <!-- <p>post方式: 上传文件</p>
+    <input type="file" id="myFile">
+    <button onclick="btn()">提交图片</button> -->
+    <script>
+        // $.ajax({
+        //     url: "/get_v1",
+        //     data: {
+        //         username: "lidongxu",
+        //         password: "hihihi"
+        //     },
+        //     success(res){
+        //         alert(res);
+        //     }
+        // })
+
+        // $.ajax({
+        //     url: "/get_v2/100/book/889",
+        //     data: {
+        //         username: "lidongxu",
+        //         password: "hihihi"
+        //     },
+        //     success(res){
+        //         alert(res);
+        //     }
+        // })
+
+        $.ajax({
+            url: "/post_v2",
+            type: "post",
+            data: JSON.stringify({
+                username: "lidongxu",
+                password: "hihihi",
+                grade: [1, 2, 3, 4, {family: '李'}]
+            }),
+            contentType: "application/json", // 添加以后向后台发送的数据, 必须是json格式的字符串
+            success(res){
+                alert(res);
+            }
+        })
+
+        function btn() {
+            let imgFile = document.getElementById("myFile").files[0];
+            let formData = new FormData();
+            formData.append("username", "lidongxu");
+            formData.append("password", "hihihi");
+            formData.append("file", imgFile);
+            $.ajax({
+                url: "/post_v2",
+                type: "post",
+                data: formData,
+                processData: false, // 只对post有效, 不要处理data参数
+                contentType: false, // 设置false,自动识别, 防止丢失分隔符
+                success(res) {
+                    alert(res);
+                }
+            })
+        }
+    </script>
+</body>
+
+</html>

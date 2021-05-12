@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        function MyPromise(fn) {
+            this.resolveFnArr = [];
+            this.rejectFnArr = [];
+            this.status = "pendding";
+            this.value = null;
+            this.thenHasErr = false; // 1. 判断第一次then有无error
+            const resolve = (value) => {
+                this.status = "fullfilled";
+                this.value = value;
+                setTimeout(() => {
+                    this.resolveFnArr.forEach((v) => v(value));
+                });
+            };
+            const reject = (val) => {
+                this.status = "rejected";
+                this.value = val;
+                setTimeout(() => {
+                    this.rejectFnArr.forEach((v) => v(val));
+                });
+            };
+            fn(resolve, reject);
+        }
+        MyPromise.prototype.then = function (thenFn, errFn) {
+            typeof thenFn !== "function" ? (thenFn = (value) => value) :
+                null;
+            typeof errFn !== "function" ? (errFn = (value) => value) : null;
+            typeof errFn === "function" ? (this.thenHasErr = true) :
+            null; // 2. 如果前面的then传了参数2, 则设置为true
+            return new MyPromise((reso, rejec) => {
+                const fullfilledFn = (rv) => {
+                    let result = thenFn(rv);
+                    result instanceof MyPromise ? result.then((
+                        reso, rejec)) : reso(result);
+                };
+                const rejectedFn = (errValue) => {
+                    let errorResult = errFn(errValue);
+                    errorResult instanceof MyPromise
+                        ?
+                        errorResult.then((reso, rejec)) :
+                        rejec(errorResult);
+                };
+
+                switch (this.status) {
+                    case "pendding":
+                        this.resolveFnArr.push(fullfilledFn);
+                        this.rejectFnArr.push(rejectedFn);
+                        break;
+                    case "fullfilled":
+                        fullfilledFn(this.value);
+                        break;
+                    case "rejected":
+                        rejectedFn(this.value);
+                        break;
+                }
+            });
+        };
+        MyPromise.prototype.catch = function (errFn) {
+            console.log(this.thenHasErr);
+            // 3. 是否拥有then的第二个参数, 再决定catch是否使用
+            let n = this.then(undefined, this.thenHasErr === false ? errFn : undefined);
+            n.status = "fullfilled";
+            return n;
+        };
+
+        MyPromise.resolve = function (val) {
+            if (val instanceof MyPromise) return val;
+            return new MyPromise((resolve) => resolve(val));
+        };
+
+        let pro = new MyPromise((resolve, reject) => {
+            reject(333);
+        });
+        pro.then(
+                (res) => console.log("成功" + res)
+                
+            ).catch((err) => {
+                console.error(err);
+            })
+    </script>
+</body>
+
+</html>

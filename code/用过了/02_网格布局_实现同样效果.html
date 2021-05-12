@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        .container{
+            display: grid;
+            grid-template-columns: auto auto auto;
+            grid-template-rows: auto auto auto;
+            grid-template-areas:
+                ". center ."
+                "left . ."
+                ". . right";
+            width: 300px;
+            height: 300px;
+            border: 1px solid black;
+        }
+        .container div{
+            width: 100px;
+            height: 100px;
+            background-color: blue;
+        }
+        .item-1{
+            grid-area: center;
+        }
+        .item-2{
+            grid-area: left;
+        }
+        .item-3{
+            grid-area: right;
+        }
+
+    </style>
+</head>
+<body>
+    <!--CSS网格布局-->
+<!--CSS Grid 布局是 CSS 中最强大的布局系统。与 flexbox 的一维布局系统不同，CSS Grid 布局是一个二维布局系统，也就意味着它可以同时处理列和行。通过将 CSS 规则应用于 父元素 (成为 Grid Container 网格容器)和其 子元素（成为 Grid Items 网格项），你就可以轻松使用 Grid(网格) 布局。
+-->
+
+
+    <div class="container">
+        <div class="item-1"></div>
+        <div class="item-2"></div>
+        <div class="item-3"></div>
+    </div>
+</body>
+</html>

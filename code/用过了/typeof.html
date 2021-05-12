@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>typeof</title>
+</head>
+<body>
+    <script>
+        let a = '10';
+        console.log(typeof(a + 11));
+        console.log(typeof 3);
+        console.log(typeof true);
+        console.log(typeof undefined);
+        console.log(typeof null);
+        console.log(typeof {});
+        console.log(typeof []);
+        console.log(typeof Symbol());
+        console.log(typeof NaN);
+        
+        function Person() {
+
+        }
+        let p = new Person();
+        console.log(p instanceof Person);
+        console.log(p);
+        
+        console.log(p);
+    </script>
+</body>
+</html>

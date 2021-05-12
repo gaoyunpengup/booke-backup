@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>连接一个socket服务器</title>
+    <!--    1. 引用socketio的js插件-->
+    <script src="https://cdn.bootcss.com/socket.io/2.2.0/socket.io.js"></script>
+</head>
+<body>
+<div id="result">
+
+</div>
+<input type="text" id="myInput">
+<button onclick="send()">发送消息</button>
+<script>
+    var thews = new WebSocket("ws://localhost:9876");
+    thews.onopen = function (e) {
+        console.log('Connection to server opened');
+    }
+    thews.onmessage = function (res) {
+        console.log(res);
+    }
+    function send() {
+        thews.send(document.getElementById("myInput").value);
+    }
+
+
+    // 2. 连接socket服务器
+    const socket = io("http://localhost:5050");
+    // 3. 监听link连接事件, 当我成功连接服务器时, 服务器会主动推送一个消息传给link事件
+    socket.on("link", (msg) => {
+        console.log(msg);
+    });
+
+    function send() {
+        socket.emit("browser_to_message", {
+            messageText: document.getElementById("myInput").value
+        });
+        let theP = document.createElement("p");
+        theP.innerHTML = document.getElementById("myInput").value;
+        document.getElementById("result").appendChild(theP);
+    }
+
+    // 接收服务器端的广播消息 (服务器主动推送消息, 给浏览器)
+    socket.on("server_back_message", (res) => {
+        let theP = document.createElement("p");
+        theP.innerHTML = res['messageText'];
+        document.getElementById("result").appendChild(theP);
+    })
+</script>
+</body>
+</html>

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        .father{
+            width: 500px;
+            height: 500px;
+            background-color: red;
+        }
+        .child{
+            width: 200px;
+            height: 200px;
+            background-color: blue;
+            margin: 0 0 0 auto;
+        }
+    </style>
+</head>
+<body>
+<!--计算顺序, 先width / height, 然后border+padding, 最后剩余给margin-->
+<div class="father">
+    <div class="child"></div>
+</div>
+</body>
+</html>

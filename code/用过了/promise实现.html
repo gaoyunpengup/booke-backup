@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 情况1: 成功Promise的基础调用
+        // let p1 = new Promise((resolve, reject) => {
+        //     resolve("1");
+        // })
+        // p1.then(res => {
+        //     console.log(res);
+        // }).then(res2 => {
+        //     console.log("链式调用");
+        //     return Promise.resolve(2);
+        // }).then(res3 => {
+        //     console.log(res3);
+        //     return 100;
+        // }).then(res4 => {
+        //     console.log(res4);
+        //     return new Promise((res, rej) => {
+        //         res("ok");
+        //     })
+        // }).then(res5 => {
+        //     console.log(res5);
+        // })
+
+        // // 情况2: Promise里调用reject
+        // let p2 = new Promise((resolve, reject) => {
+        //     reject("1");
+        // });
+        // p2.catch(err => {
+        //     console.error(err);
+        // }).catch(er => {
+        //     console.log(er);
+        // })
+
+        // // 情况3: Promise里抛出错误
+        // let p3 = new Promise((resolve, reject) => {
+        //     throw new Error("抛出错误哦");
+        //     resolve("1");
+        // });
+        // p3.then(res => {
+        //     console.log("例3: 成功");
+        // }).catch(err => {
+        //     console.error(err);
+        // }).catch(er => {
+        //     console.log(er);
+        // })
+
+        // // 情况4: 在then里抛出异常
+        // let p4 = new Promise((resolve, reject) => {
+        //     resolve("1");
+        // });
+        // p4.then(res => {
+        //     console.log("p4, 成功");
+        //     throw new Error("then里错误");
+        // }).catch(err => {
+        //     console.error(err)
+        // })
+
+        // // 情况5: 在then里调用Promise.reject返回
+        // let p5 = new Promise((resolve, reject) => {
+        //     resolve("1");
+        // });
+        // p5.then(res => {
+        //     console.log("p4, 成功");
+        //     return Promise.reject(555);
+        // }).catch(err => {
+        //     console.error(err)
+        // })
+
+        // // 情况6: 在then里返回正确结果跳过catch给下一个then
+        // let p6 = new Promise((resolve, reject) => {
+        //     resolve("1");
+        // });
+        // p6.then(res => {
+        //     console.log("p6, 成功");
+        //     return "ok结果给下个then"
+        // }).catch(err => {
+        //     console.error(err)
+        // }).then(res => {
+        //     console.log(res);
+        // })
+        // // 情况7: catch里返回正确结果呢? 首先上面得抛出异常进入catch
+        // // 处理上面异常, 把结果返回给下个then
+        // let p7 = new Promise((resolve, reject) => {
+        //     resolve("1");
+        // });
+        // p7.then(res => {
+        //     console.log("p6, 成功");
+        //     throw new Error("报错了")
+        // }).catch(err => {
+        //     console.error(err);
+        //     return 1000;
+        // }).then(res => {
+        //     console.log(res);
+        // })
+        // // 情况8: catch里抛出错误, 给隔着的catch函数
+        // let p8 = new Promise((resolve, reject) => {
+        //     resolve("1");
+        // });
+        // p8.then(res => {
+        //     console.log("p6, 成功");
+        //     throw new Error("报错了")
+        // }).catch(err => {
+        //     console.error(err);
+        //     throw new Error("catch里也报错了")
+        // }).then(res => {
+        //     console.log(res);
+        // }).catch(err => {
+        //     console.error(err);
+        // }).catch(err => {
+        //     console.error(err);
+        // })
+        // // 情况9: 在catch里调用Promise.resolve()
+        // let p9 = new Promise((resolve, reject) => {
+        //     resolve("1");
+        // });
+        // p9.then(res => {
+        //     console.log("p6, 成功");
+        //     throw new Error("报错了")
+        // }).catch(err => {
+        //     console.error(err);
+        //     throw new Error("catch里也报错了")
+        // }).then(res => {
+        //     console.log(res);
+        // }).catch(err => {
+        //     console.error(err);
+        //     return Promise.resolve("ok不")
+        // }).then(res => {
+        //     console.log(res);
+        // })
+        // // 情况10: 在catch里调用Promise.reject()
+        // let p10 = new Promise((resolve, reject) => {
+        //     resolve("1");
+        // });
+        // p10.then(res => {
+        //     console.log("p10, 成功");
+        //     throw new Error("报错了")
+        // }).catch(err => {
+        //     console.error(err);
+        //     throw new Error("catch里也报错了")
+        // }).then(res => {
+        //     console.log(res);
+        // }).catch(err => {
+        //     console.error(err);
+        //     return Promise.reject("最后一个了")
+        // }).catch(err => {
+        //     console.error(err);
+        // })
+
+        // 情况11: 在catch里调用Promise.reject()
+        let x11 = new Promise((resolve, reject) => {
+            resolve("1");
+        });
+        x11.then(res => {
+            console.log(res);
+        }).catch(err => {
+            console.error(err);
+            return Promise.reject("最后一个了")
+        }).catch(err => {
+            console.error(err);
+        }).finally(() => {
+            console.log("最后执行");
+        }).then(() => {
+            console.log("finally后的then");
+        }).catch(() => {
+            console.error("finally后的catch");
+        })
+
+
+    </script>
+
+    <script>
+        function MyPromise(fn) {
+            this.resolveFnArr = [];
+            this.rejectFnArr = [];
+            this.status = "pendding";
+            this.value = null;
+            this.thenHasErr = false;
+            this.catchInError = false;
+            const resolve = (value) => {
+                this.status = "fullfilled";
+                this.value = value;
+                setTimeout(() => {
+                    this.resolveFnArr.forEach((v) => v(value));
+                });
+            };
+            const reject = (val) => {
+                this.status = "rejected";
+                this.value = val;
+                setTimeout(() => {
+                    this.rejectFnArr.forEach((v) => v(val));
+                });
+            };
+            try {
+                fn(resolve, reject);
+            } catch (err) {
+                this.value = err;
+                this.status = "rejected";
+            }
+        }
+        MyPromise.prototype.then = function (thenFn, errFn) {
+            typeof thenFn !== 'function' ? thenFn = value => value : null;
+            typeof errFn !== 'function' ? errFn = value => value : null;
+            let p = new MyPromise((reso, rejec) => {
+                const fullfilledFn = rv => {
+                    try {
+                        let result = thenFn(rv);
+                        result instanceof MyPromise ? result
+                            .then(reso, rejec) : reso(result);
+                    } catch (err) {
+                        rejec(err);
+                    }
+                }
+                const rejectedFn = errValue => {
+                    try {
+                        let errorResult = errFn(errValue);
+                        errorResult instanceof MyPromise ?
+                            errorResult.then(reso, rejec) :
+                            rejec(errorResult);
+                    } catch (err) {
+                        this.catchInError = true;
+                        rejec(err);
+                    }
+                }
+                switch (this.status) {
+                    case "pendding":
+                        this.resolveFnArr.push(fullfilledFn);
+                        this.rejectFnArr.push(rejectedFn);
+                        break;
+                    case "fullfilled":
+                        fullfilledFn(this.value);
+                        break;
+                    case "rejected":
+                        rejectedFn(this.value);
+                        break;
+                }
+            });
+            // typeof errFn === 'function' ? p.thenHasErr = true : null;
+            return p;
+        };
+        MyPromise.prototype.catch = function (errFn) {
+            let n = this.then(undefined, this.thenHasErr === false ? errFn :
+                undefined);
+            n.status = this.catchInError === true ? 'rejected' :
+                "fullfilled"; // 调用catch返回的Primse设置状态决定下个then/catch是否执行
+            return n;
+        }
+        MyPromise.prototype.finally = function (callback) {
+            return this.then(
+                value => MyPromise.resolve(callback()).then(() =>
+                value), // MyPromise.resolve执行回调,并在then中return结果传递给后面的Promise
+                reason => MyPromise.resolve(callback()).then(() => {
+                    throw reason
+                }) // reject同理
+            )
+        }
+
+        MyPromise.resolve = function (val) {
+            if (val instanceof MyPromise) return val;
+            return new MyPromise((resolve, reject) => resolve(val));
+        };
+
+        MyPromise.reject = function (val) {
+            return new MyPromise((resolve, reject) => reject(val));
+        };
+        MyPromise.all = function (promiseArr) {
+            let index = 0
+            let result = []
+            return new MyPromise((resolve, reject) => {
+                promiseArr.forEach((p, i) => {
+                    //Promise.resolve(p)用于处理传入值不为Promise的情况
+                    MyPromise.resolve(p).then(
+                        val => {
+                            index++
+                            result[i] = val
+                            //所有then执行后, resolve结果
+                            if (index === promiseArr
+                                .length) {
+                                resolve(result)
+                            }
+                        },
+                        err => {
+                            //有一个Promise被reject时，MyPromise的状态变为reject
+                            reject(err)
+                        }
+                    )
+                })
+            })
+        }
+
+        console.log("---------------------");
+
+        // 情况1: 成功Promise的基础调用
+        let p11 = new MyPromise((resolve, reject) => {
+            resolve("1");
+        })
+        p11.then(res => {
+            console.log(res);
+        }).then(res2 => {
+            console.log("链式调用");
+            return MyPromise.resolve(2);
+        }).then(res3 => {
+            console.log(res3);
+            return 100;
+        }).then(res4 => {
+            console.log(res4);
+            return new MyPromise((res, rej) => {
+                res("ok");
+            })
+        }).then(res5 => {
+            console.log(res5);
+        })
+
+        // 情况2: Promise里报错
+        let p22 = new MyPromise((resolve, reject) => {
+            reject("1");
+        });
+        p22.catch(err => {
+            console.error(err);
+        }).catch(er => {
+            console.log(er);
+        })
+
+        // 情况3: Promise里抛出错误
+        let p33 = new MyPromise((resolve, reject) => {
+            throw new Error("抛出错误哦");
+            resolve("1");
+        });
+        p33.then(res => {
+            console.log("例3: 成功");
+        }).catch(err => {
+            console.error(err);
+        }).catch(er => {
+            console.log(er);
+        })
+
+        // 情况4: 在then里抛出异常
+        let p44 = new MyPromise((resolve, reject) => {
+            resolve("1");
+        });
+        p44.then(res => {
+            console.log("p4, 成功");
+            throw new Error("then里错误");
+        }).catch(err => {
+            console.error(err)
+        })
+        // 情况5: 在then里调用Promise.reject()返回
+        let p55 = new MyPromise((resolve, reject) => {
+            resolve("1");
+        });
+        p55.then(res => {
+            console.log("p5, 成功");
+            return MyPromise.reject(555);
+        }).catch(err => {
+            console.error(err)
+        })
+        // 情况6: (跳过catch)在then里返回正确结果跳过catch给下一个then
+        let p66 = new MyPromise((resolve, reject) => {
+            resolve("1");
+        });
+        p66.then(res => {
+            console.log("p6, 成功");
+            return "ok结果给下个then"
+        }).catch(err => {
+            console.error(err)
+        }).then(res => {
+            console.log(res);
+        })
+        // 情况7: (catch返回正确)catch里返回正确结果呢? 首先上面得抛出异常进入catch
+        // 处理上面异常, 把结果返回给下个then
+        let p77 = new MyPromise((resolve, reject) => {
+            resolve("1");
+        });
+        p77.then(res => {
+            console.log("p7, 成功");
+            throw new Error("报错了")
+        }).catch(err => {
+            console.error(err);
+            return 1000;
+        }).then(res => {
+            console.log(res);
+        })
+
+        // 情况8: catch里抛出错误, 给隔着的catch函数
+        let p88 = new MyPromise((resolve, reject) => {
+            resolve("1");
+        });
+        p88.then(res => {
+            console.log("p8, 成功");
+            throw new Error("报错了")
+        }).catch(err => {
+            console.error(err);
+            throw new Error("catch里也报错了")
+        }).then(res => {
+            console.log(res);
+        }).catch(err => {
+            console.error(err);
+        }).catch(err => {
+            console.error(err);
+        })
+        // 情况9: 在catch里调用Promise.resolve()
+        let p99 = new MyPromise((resolve, reject) => {
+            resolve("1");
+        });
+        p99.then(res => {
+            console.log("p9, 成功");
+            throw new Error("报错了")
+        }).catch(err => {
+            console.error(err);
+            throw new Error("catch里也报错了")
+        }).then(res => {
+            console.log(res);
+        }).catch(err => {
+            console.error(err);
+            return MyPromise.resolve("ok不");
+        }).then(res => {
+            console.log(res);
+        })
+        // 情况10: 在catch里调用Promise.reject()
+        let p100 = new MyPromise((resolve, reject) => {
+            reject("1");
+        });
+        p100.catch(err => {
+            console.error(err);
+            throw new Error("catch里也报错了")
+        }).catch(err => {
+            console.error(err);
+            throw new Error("最后一个了");
+        }).catch(err => {
+            console.error(err);
+        });
+        // 情况11: finally使用
+        let f11 = new MyPromise((resolve, reject) => {
+            resolve("1");
+        });
+        f11.then(res => {
+            console.log("p11, 成功");
+            throw new Error("报错了")
+        }).catch(err => {
+            console.error(err);
+            // throw new Error("catch里也报错了")
+        }).finally(() => {
+            console.log("最后执行");
+        }).then(() => {
+            console.log("finally后的then");
+        }).catch((err) => {
+            console.error("finally后的catch" + err);
+        })
+
+        // 情况12: Promise.all使用
+        let theP1 = new MyPromise((resolve, reject) => {
+            setTimeout(() => {
+                resolve(1);
+            }, Math.floor(Math.random() * 3000));
+        })
+        let theP2 = new MyPromise((resolve, reject) => {
+            setTimeout(() => {
+                resolve(222);
+            }, Math.floor(Math.random() * 3000));
+        })
+        let theP3 = new MyPromise((resolve, reject) => {
+            setTimeout(() => {
+                resolve(333);
+            }, Math.floor(Math.random() * 3000));
+        })
+        MyPromise.all([theP1, theP2, theP3]).then(res => {
+            console.log(res);
+        }).catch(err => {
+            console.error(err);
+        })
+
+        // 情况12, 没人处理异常 (原生的也不会抛出给系统的, 所以什么都不执行)
+        let pp12 = new MyPromise((resolve, reject) => {
+            throw new Error(123);
+        });
+        pp12.then(res => {
+            console.log(res);
+            throw new Error(123);
+        })
+    </script>
+</body>
+
+</html>

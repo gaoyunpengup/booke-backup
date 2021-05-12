@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+</head>
+<body>
+    <input type="file" id="myFile">
+    <button onclick="btn()">单文件上传</button>
+    <script>
+        function btn(){
+            let file = document.getElementById("myFile").files[0]; // 取出文件对象
+            let formData = new FormData();
+            formData.append("image", file);
+            $.ajax({
+                url: "/uploadOneFile",
+                type: "POST",
+                data: formData,
+                processData: false,
+                contentType: false
+            })
+        }
+    </script>
+</body>
+</html>

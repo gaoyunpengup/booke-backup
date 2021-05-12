@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body><button title="btn1"></button><button title="btn2"></button><button title="btn3"></button><button title="btn4"></button><button title="btn5"></button><button title="btn6"></button><button title="btn7"></button><button title="btn8"></button><button title="btn9"></button><button title="btn10"></button></body>
+<script>
+    let btnCollection = document.querySelectorAll("button");
+    Array.from(btnCollection).map(el => {
+        el.onclick = function(){
+            el.remove();
+            console.log(btnCollection);
+            console.log(document.body.childNodes);
+            
+        }
+    })
+    console.log(btnCollection);
+    
+</script>
+</html>

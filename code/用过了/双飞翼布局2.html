@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        *{
+            margin: 0;
+        }
+        .wrap::after{
+            content: " ";
+            display: block;
+            clear: both;
+        }
+        .left_div,
+        .main_div,
+        .right_div {
+            float: left;
+            height: 130px;
+            color: white;
+        }
+        .left_div {
+            margin-left: -100%;
+            width: 200px;
+            background: red;
+            border: 1px solid black;
+        }
+        .right_div {
+            margin-left: -200px;
+            width: 200px;
+            background: blue;
+        }
+        .main_div {
+            width: 100%;
+            height: 130px;
+            background: green;
+        }
+        .main_content{
+            margin-left: 200px;
+            margin-right: 200px;
+        }
+    </style>
+</head>
+<body>
+<!--父级wrap用于, 清除三块div的浮动-->
+    <div class="wrap">
+        <!--这里注意必须要套一个div, 外层div占据整个容器宽度, 内部div默认宽度百分百, 如果没有外层容器, 则宽度无法撑开, 然后里面设置左右margin, 给下面2个浮动div, 让他俩可以占据左右留出的margin的位置-->
+        <div class="main_div">
+            <div class="main_content">中间内容中间内容中间内容中间内容中间内容中间内容中间内容中间内容中间内容中间内容中间内容中间内容中间内容中间内容</div>
+        </div>
+        <div class="left_div">左-红色Div</div>
+        <div class="right_div">右-蓝色Div</div>
+    </div>
+</body>
+</html>

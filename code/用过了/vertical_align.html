@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>vertical-align</title>
+    <style>
+        .my_div{
+            border: 1px solid gray;
+        }
+        .my_div img{
+            border: 1px solid black;
+
+            margin-bottom: 70px;
+        }
+        .my_div span{
+            font-size: 32px;
+            /*width: 100px;*/
+            /*height: 100px;*/
+            display: inline-block;
+            border: 1px solid black;
+            line-height: 1; /*重要, 不然默认normal是1.2倍行间距, 影响找线*/
+        }
+        .span1{
+            border: 1px solid red;
+        }
+        .span2{
+            vertical-align: -32px;
+        }
+        .span3{
+            vertical-align: -100%; /*参考line-height的值, 与-16相等*/
+        }
+        .span4{
+            vertical-align: top;
+        }
+        .span5{
+            vertical-align: middle;
+
+        }
+        .span6{
+            vertical-align: baseline;
+        }
+        .span7{
+            vertical-align: bottom;
+        }
+        .span8{
+            vertical-align: text-top;
+        }
+        .span9{
+            vertical-align: text-bottom;
+        }
+        .span10{
+            vertical-align: sub;
+        }
+        .span11{
+            vertical-align: super;
+        }
+    </style>
+</head>
+<body>
+<div class="my_div">
+    xx
+    <img src="hello.png"/>
+    <span class="span1">baseline</span>
+    <span class="span2">-32px</span>
+    <span class="span3">-100%</span>
+    <span class="span4">top</span>
+    <span class="span5">middle</span>
+    <span class="span6">baseline</span>
+    <span class="span7">bottom</span>
+    <span class="span8">text-top</span>
+    <span class="span9">text-bottom</span>
+    <span class="span10">subGg</span>
+    <span class="span11">superGg</span>
+</div>
+</body>
+</html>

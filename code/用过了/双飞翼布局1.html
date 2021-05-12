@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        *{
+            margin: 0;
+        }
+        .wrap {
+            display: flex;
+        }
+        .left_div,
+        .main_div,
+        .right_div {
+            height: 130px;
+            color: white;
+        }
+        .left_div {
+            width: 200px;
+            background: red;
+        }
+        .main_div {
+            flex: 1;
+            min-height: 130px;
+            background: green;
+        }
+        .right_div {
+            width: 200px;
+            background: blue;
+        }
+    </style>
+</head>
+<body>
+    <div class="wrap">
+        <div class="left_div">左-红色Div</div>
+        <div class="main_div">我是内容啊我是内容啊我是内容啊我是内容啊我是内容啊我是内容啊我是内容啊我是内容啊我是内容啊我是内容啊我是内容啊我是内容啊我是内容啊我是内容啊我是内容啊我是内容啊我是内容啊我是内容啊我是内容啊我是内容啊我是内容啊我是内容啊我是内容啊我是内容啊我是内容啊我是内容啊我是内容啊我是内容啊</div>
+        <div class="right_div">右-蓝色Div</div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <button id="btn">点我</button>
+    <button onclick="btn2()">再点下</button>
+    <script>
+        
+        function fnOne(){
+            console.log(this); // 前面有window.fnOne(), 所以this默认指向window对象
+        }
+        fnOne();
+
+        setTimeout(function(){
+            console.log(this); // window.setTimeout, 所以this默认指向window对象
+        }, 0);
+
+        (function(){
+            console.log(this); // 代码默认前面都有个window.调用, 所以this默认指向window
+        })();
+
+        function btn2(){
+            console.log(this); // 默认由window调用
+        }
+
+        document.getElementById("btn").onclick = function(){
+            console.log(this); // 由id叫btn的按钮绑定的点击事件, 调用是按钮.onclick触发函数, 所以this默认指向btn按钮
+        }
+
+        let obj = {
+            a: "web前端",
+            b: function(){
+                console.log(this); // obj对象 (默认指向调用者)
+            }
+        }
+        obj.b();
+
+        let obj2 = {
+            a: "web前端",
+            b: function(){
+                console.log(this); // 注意默认指向调用者所以默认值为window
+            }
+        }
+        let fn = obj2.b; // 这里不是调用函数, 而是取出函数
+        fn();
+
+        let obj3 = {
+            a: "web前端3",
+            b: function(){
+                return function(){
+                    console.log(this); // 默认指向window
+                }
+            }
+        }
+        let fn2 = obj3.b();
+        fn2();
+
+        let obj4 = {
+            a: "web前端",
+            b: function(){
+                return {
+                    c: "h5啊",
+                    d: function(){
+                        console.log(this); // 指向当前c, d为key的此对象
+                    }
+                }
+            }
+        }
+        obj4.b().d(); // obj4.b() 得到对象, 然后对象.d()调用的, 所以看好调用者是谁
+
+        // call/apply 绑定
+        function Person(){
+            this.username = "";
+            this.age = 0;
+        }
+        let obj = {};
+        Person.call(obj); // call/apply效果相同, 调用Person函数, 修改函数里this指向的值为obj对象, 并且在obj对象上添加username和age属性
+        // obj的值: {username: "", age: 0}
+    </script>
+</body>
+</html>

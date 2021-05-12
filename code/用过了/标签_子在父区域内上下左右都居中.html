@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        .father{
+            border: 1px solid black;
+        }
+        .children{
+            border: 1px solid red;
+        }
+    </style>
+    <style>
+        /*.father{*/
+            /*position: relative;*/
+            /*padding: 100px 0;*/
+            /*border: 1px solid black;*/
+        /*}*/
+        /*.children{*/
+            /*position: absolute;*/
+            /*top: 50%;*/
+            /*left: 50%;*/
+            /*transform: translate(-50%, -50%);*/
+            /*border: 1px solid red;*/
+        /*}*/
+    </style>
+    <style>
+        /*.father {*/
+            /*padding: 100px 0;*/
+            /*display: flex;*/
+            /*align-items: center;*/
+            /*justify-content: center;*/
+        /*}*/
+    </style>
+    <style>
+        /*.father{*/
+            /*padding: 100px 0;*/
+            /*border: 1px solid black;*/
+            /*display: flex;*/
+
+        /*}*/
+        /*.children{*/
+            /*border: 1px solid red;*/
+            /*margin: auto;*/
+        /*}*/
+    </style>
+    <style>
+        /*.father{*/
+            /*width: 500px;*/
+            /*height: 300px;*/
+            /*border: 1px solid black;*/
+            /*position: relative;*/
+        /*}*/
+        /*.children{*/
+            /*width: 150px;*/
+            /*height: 100px;*/
+            /*border: 1px solid red;*/
+            /*position: absolute;*/
+            /*top: 50%;*/
+            /*left: 50%;*/
+            /*margin-left: -75px;*/
+            /*margin-top: -50px;*/
+        /*}*/
+    </style>
+    <style>
+        /*.father{*/
+            /*width: 500px;*/
+            /*height: 300px;*/
+            /*border: 1px solid black;*/
+            /*position: relative;*/
+        /*}*/
+        /*.children{*/
+            /*width: 150px;*/
+            /*height: 100px;*/
+            /*border: 1px solid red;*/
+            /*position: absolute;*/
+            /*top: 0;*/
+            /*left: 0;*/
+            /*right: 0;*/
+            /*bottom: 0;*/
+            /*margin: auto;*/
+        /*}*/
+    </style>
+    <style>
+        .father{
+            width: 300px;
+            height: 300px;
+            display: grid;
+            /*每一行/每一列所占宽度*/
+            grid-template-columns: 100px 100px 100px;
+            grid-template-rows: 100px 100px 100px;
+            /*网格区域 grid areas 在CSS中的特定命名。*/
+            grid-template-areas:
+                    ". . ."
+                    ". c ."
+                    ". . .";
+        }
+        .children{
+            grid-area: c;
+        }
+    </style>
+</head>
+<body>
+    <div class="father">
+        <div class="children"></div>
+    </div>
+</body>
+</html>

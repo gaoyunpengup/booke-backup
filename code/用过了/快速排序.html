@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 1. 以0位置为基准, 从右侧往左侧, 找到第一个比它小的值的下标(用while)
+        // let arr = [3, 5, 8, 1, 2, 9, 4, 7, 6];
+        // let right = arr.length - 1;
+        // let p = arr[0];
+        // while (arr[right] > p){
+        //     right--;
+        // }
+        // console.log(right); // 4(下标)
+        /*执行过程:
+            right -> 8(下标)
+            p -> 3
+            while会进入, 直到right的值为4, while停止
+            找到了比基准值p小的右侧数据的 下标
+        */
+
+        // 2. 把值覆盖过去
+        // 再从左侧找到比基准值, 比它大的值的下标(用while)
+        // let arr = [3, 5, 8, 1, 2, 9, 4, 7, 6];
+        // let right = arr.length - 1;
+        // let left = 0;
+        // let p = arr[left];
+        // while (arr[right] >= p){
+        //     right--;
+        // }
+        // arr[left] = arr[right]; // 不用担心, 因为left位置的值已经在p变量中
+        // while (arr[left] <= p){ 
+        //     left++;
+        // }
+        // console.log(left); // 1(下标)
+        /* 新增代码: 执行过程
+            把下标4的值覆盖到left的位置如下:
+            arr[left] = arr[right]; // arr: [2, 5, 8, 1, 2, 9, 4, 7, 6]
+            第二个while开始执行, 直到 left -> 1, while停止
+            找到了左侧比基准值p大的左侧数据的下标 1
+        */
+
+        // 3. 把left位置的值赋予给right, 并且把p赋予给left位置隔开两边
+        // let arr = [3, 5, 8, 1, 2, 9, 4, 7, 6];
+        // let right = arr.length - 1;
+        // let left = 0;
+        // let p = arr[left];
+        // while (arr[right] >= p){
+        //     right--;
+        // }
+        // arr[left] = arr[right];
+        // while (arr[left] <= p){ 
+        //     left++;
+        // }
+        // arr[right] = arr[left];
+        // arr[left] = p;
+        // console.log(arr); // [2, 3, 8, 1, 5, 9, 4, 7, 6]
+        /*执行过程:
+            新增代码: 执行过程
+            上线代码结果: arr: [2, 5, 8, 1, 2, 9, 4, 7, 6]
+            arr[right] = arr[left]执行后 arr: [2, 5, 8, 1, 5, 9, 4, 7, 6]
+            arr[left] = p; 把基准值赋予给左侧后 arr: [2, 3, 8, 1, 5, 9, 4, 7, 6]
+        */
+
+        // 4. 如果开头是10呢
+        // let arr = [10, 3, 5, 8, 1, 2, 9, 4, 7, 6];
+        // let right = arr.length - 1;
+        // let left = 0;
+        // let p = arr[left];
+        // while (arr[right] >= p){
+        //     right--;
+        // }
+        // arr[left] = arr[right];
+        // while (arr[left] <= p){ 
+        //     left++;
+        // }
+        // arr[right] = arr[left];
+        // arr[left] = p;
+        // console.log(arr); // [6, 3, 5, 8, 1, 2, 9, 4, 7, undefined, 10]
+        /*
+        代码执行过程
+        right -> 9
+        left -> 0
+        p -> 10
+        第一个while进不去, 所以right一直是9, 把6赋予做left为0的位置
+        arr: [6, 3, 5, 8, 1, 2, 9, 4, 7, 6]
+        第二个while, 直到left -> 10, 从arr[10]取出undefined, while停止
+        执行arr[right] = arr[left];
+        arr: [6, 3, 5, 8, 1, 2, 9, 4, 7, undefined];
+        再执行arr[left] = p;
+        arr: [6, 3, 5, 8, 1, 2, 9, 4, 7, undefined, 10];
+        */
+
+        // 5. 所以当left < right, 才能确保, 右侧是比基准大的, 左侧比基准小的, 不会出现undefined问题, 所以不能让while和if, 出现left > right情况
+        // let arr = [10, 3, 5, 8, 1, 2, 9, 4, 7, 6];
+        // let right = arr.length - 1;
+        // let left = 0;
+        // let p = arr[left];
+        // while (arr[right] >= p && left < right) {
+        //     right--;
+        // }
+        // if (left < right) {
+        //     arr[left] = arr[right];
+        // }
+        // while (arr[left] <= p && left < right) {
+        //     left++;
+        // }
+        // if (left < right) {
+        //     arr[right] = arr[left];
+        // }
+        // arr[left] = p;
+
+        // console.log(arr); // [6, 3, 5, 8, 1, 2, 9, 4, 7, 10]
+        /*
+        代码执行过程
+        right -> 9
+        left -> 0
+        p -> 10
+        第一个while进不去, 所以right一直是9, 把6赋予做left为0的位置
+        if中left 0  < right 9进入
+        arr: [6, 3, 5, 8, 1, 2, 9, 4, 7, 6]
+        第二个while:
+        left -> 0, arr[0] -> 6   符合 < p值的 条件,  0 < 9 进入, left++
+        直到left为9, 停止while循环
+        但是if 中 left 9 < right 9 不符合不进入赋值
+        再执行arr[left] = p; (把6赋予到left为9的位置上)
+        arr: [6, 3, 5, 8, 1, 2, 9, 4, 7, 6, 10];
+        */
+
+        // 6. 我们把10去掉, 发现上面的代码结果不太对, 保证3左边都是比3小的, 右边比3大的
+        // let arr = [3, 5, 8, 1, 2, 9, 4, 7, 6];
+        // let right = arr.length - 1;
+        // let left = 0;
+        // let p = arr[left];
+        // while (left < right) {
+        //     while (arr[right] >= p && left < right) {
+        //         right--;
+        //     }
+        //     if (left < right) {
+        //         arr[left] = arr[right];
+        //     }
+        //     while (arr[left] <= p && left < right) {
+        //         left++;
+        //     }
+        //     if (left < right) {
+        //         arr[right] = arr[left];
+        //     }
+        //     arr[left] = p;
+        // }
+        // console.log(arr); //  [2, 1, 3, 8, 5, 9, 4, 7, 6]
+        /*
+            执行过程:
+            left -> 0, right -> 9, arr: [3, 5, 8, 1, 2, 9, 4, 7, 6] (开始默认)
+            left -> 1, right -> 4, arr: [2, 3, 8, 1, 5, 9, 4, 7, 6]
+            right -> 3, left -> 1, arr: [2, 1, 8, 1, 5, 9, 4, 7, 6]
+            left累加发现大于right了, left为2停止了
+            left -> 2
+            arr[right] = arr[left]; arr: [2, 1, 8, 8, 5, 9, 4, 7, 6]
+            所以执行arr[left] = p;
+            最后结果: arr: [2, 1, 3, 8, 5, 9, 4, 7, 6]
+        */
+
+        // 7.  改装成函数形式
+        // function quickSort(arr, left, right) {
+        //     let p = arr[left];
+        //     while (left < right) {
+        //         while (arr[right] >= p && left < right) {
+        //             right--;
+        //         }
+        //         if (left < right) {
+        //             arr[left] = arr[right];
+        //         }
+        //         while (arr[left] <= p && left < right) {
+        //             left++;
+        //         }
+        //         if (left < right) {
+        //             arr[right] = arr[left];
+        //         }
+        //         arr[left] = p;
+        //     }
+        // }
+        // let arr = [3, 5, 8, 1, 2, 9, 4, 7, 6];
+        // quickSort(arr, 0, arr.length - 1);
+        // console.log(arr); //  [2, 1, 3, 8, 5, 9, 4, 7, 6]
+
+        // 8. 对基准3左侧, 再执行一次排序函数 (其实思路就是一直递归排两边了)
+        // 但是当left < right 才可以进入排列哦
+        // function quickSort(arr, left, right) {
+        //     if (left < right) {
+        //         let p = arr[left];
+        //         while (left < right) {
+        //             while (arr[right] >= p && left < right) {
+        //                 right--;
+        //             }
+        //             if (left < right) {
+        //                 arr[left] = arr[right];
+        //             }
+        //             while (arr[left] <= p && left < right) {
+        //                 left++;
+        //             }
+        //             if (left < right) {
+        //                 arr[right] = arr[left];
+        //             }
+        //             arr[left] = p;
+        //         }
+        //         quickSort(arr, 0, left - 1);
+        //     }
+        // }
+        // let arr = [3, 5, 8, 1, 2, 9, 4, 7, 6];
+        // quickSort(arr, 0, arr.length - 1);
+        // console.log(arr); //  [1, 2, 3, 8, 5, 9, 4, 7, 6]
+
+        // 9. 再对右侧排列一下
+        // 要注意, 左侧排列 开始位置, 应该是0到基准left-1的位置
+        // 右侧排列时, 开始位置不能是0啊, 应该是left+1, 而且结尾应该是上一次的right
+        // 注意: 这里可能遇到相邻的值相等的问题, 相等时也该继续向下查找, 所以在while判断中加入=
+        function quickSort(arr, left, right) {
+            if (left < right) {
+                let nowRight = right;
+                let p = arr[left];
+                while (left < right) {
+                    while (arr[right] >= p && left < right) {
+                        right--;
+                    }
+                    if (left < right) {
+                        arr[left] = arr[right]; // 为什么不写left++也可以, 下面就相当于自己和p比较了一次, 多比较了一次而已
+                    }
+                    while (arr[left] <= p && left < right) {
+                        left++;
+                    }
+                    if (left < right) {
+                        arr[right] = arr[left];
+                    }
+                    arr[left] = p;
+                }
+                quickSort(arr, 0, left - 1);
+                quickSort(arr, left + 1, nowRight);
+            }
+        }
+        let arr = [3, 5, 8, 1, 2, 9, 4, 7, 6];
+        quickSort(arr, 0, arr.length - 1);
+        console.log(arr); //   [1, 2, 3, 4, 5, 6, 7, 8, 9]
+    </script>
+
+</body>
+
+</html>

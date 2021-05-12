@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div>
+    <p>你的年龄现在: <input id="result" oninput="changeAge(event)"/></p>
+</div>
+<script>
+    let model = {
+        age: 18
+    };
+    document.getElementById("result").value = model.age;
+
+    function changeAge(ev){
+        model.age = ev.target.value;
+        console.log(model.age);
+    }
+    // 但是发现, 打开网页, 在控制台修改model.age的值, 无法更新页面, 所以还没有达到双向绑定的目的
+</script>
+</body>
+</html>

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>拖拽上传</title>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js">
+    </script>
+    <style>
+        body {
+            margin: 0;
+        }
+
+        .drop_box {
+            border: 1px solid black;
+            height: 120px;
+        }
+        .drop_box img{
+            width: 200px;
+            height: 120px;
+        }
+    </style>
+</head>
+
+<body>
+    <p>拖动文件到这里,开始上传</p>
+    <div class="drop_box" id="dropBox">
+    </div>
+    <button onclick="btn()">多文件上传</button>
+    <script>
+        let box = document.getElementById('dropBox');
+        let fileArr = [];
+        //设置拖拽事件
+        function openDropEvent() {
+            // ondragover - 当被拖动的对象在事件对象box范围内拖动时触发此事件
+            box.addEventListener("dragover", function (e) {
+                e.preventDefault(); // 禁用浏览器的拖放默认行为(比如拖放给打开了)
+            });
+            // drop事件: 在一个拖动过程中，释放鼠标键时触发此事件
+            box.addEventListener("drop", function (e) {
+                e.preventDefault(); //取消浏览器默认拖拽效果
+                e.stopPropagation();
+                var fileList = e.dataTransfer.files; //获取拖拽中的文件对象
+                var len = fileList.length; //用来获取文件的长度（其实是获得文件数量）
+                // 检测是否是拖拽文件到页面的操作
+                if (!len) {
+                    return;
+                }
+                fileArr = Array.from(fileList);
+                fileArr.map(file => {
+                    let img = document.createElement("img");
+                    img.src = URL.createObjectURL(file);
+                    img.onload = function () {
+                        //显示要是否这块儿内存
+                        URL.revokeObjectURL(this.src);
+                    }
+                    box.appendChild(img);
+                })
+            }, false);
+        }
+        openDropEvent();
+
+        // 开始上传的方法 (每一个文件, 触发一次)
+        function btn() {
+            fileArr.map(file => {
+                let formData = new FormData();
+                formData.append("image", file);
+                $.ajax({
+                    url: "/uploadManyFile",
+                    type: "POST",
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success (res) {
+                        console.log(res);
+                    },
+                    error(err) {
+                        console.log(err); 
+                    }
+                })
+            })
+        }
+    </script>
+</body>
+
+</html>

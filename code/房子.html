@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        #ben,
+        #mon,
+        #dan,
+        #mai,
+        #sui,
+        #myMon {
+            color: red;
+        }
+    </style>
+</head>
+
+<body>
+    <div>
+        <span>剩余应还银行本金: </span><span id="ben"></span>
+    </div>
+    <!-- <div>
+        <span>如果不买房, 手里一共有(算租房的和利息, 以及首付和利息, 以及每个月7300本金和利息, 手里现在有)</span><span id="mon"></span>
+    </div> -->
+    <div>
+        <span>还我舅舅之后, 自己有:</span>
+        <span id="myMon"></span>
+    </div>
+    <div>
+        <span>3%中介费 6.5房产税(个人所得税1%和营业税5%), 0.1% 印花税
+        1.5% 契税</span> <span id="sui"></span>
+        <br>
+        <span>卖房总价:</span> <span id="mai"></span>
+        <br>
+        <span>在这个单价卖不赔钱:</span> <span id="dan"></span>
+        <br>
+        <span></span>
+
+    </div>
+    <script>
+        var huanArr = [8, 9, 10, 11, 12, 201901, 20190205, 20190305, 20190405, 20190505, 20190605, 20190705, 20190805, 20190905, 20191005, 20191105, 20191205, 20200105, 20200205, 20200305, 20200405, 20200505, 20200605, 20200705, 20200805]; // 还款次数
+        var zuArr = [8, 9, 10, 11, 12, 201901, 1902, 1903, 1904, 1905, 1906, 1907, 1908, 202005, 202006, 202007]; // 租房月份 (2020不租房)
+
+        var shouFu = 564488; // 首付金额
+        var shouFuStart = new Date(2018, 6, 31);
+
+        var daiAllMoney = 1290000; // 贷款总额
+        var lilv = 0.05439; // 5.439(贷款合同是这个)
+        var huanMoney = 7267.17; // 每个月固定还款
+        var otherMoney = 8000; // 1000做假流水  1000代办费, 3000+取暖费3000+物业费
+        var bankLiLv = 0.04; // 银行理财利率 4%
+
+        // 算下, 剩余应该换的本机还有多少
+        for (var i = 0; i < huanArr.length; i++) {
+            // 每个月, 计算利息
+            // 得到每个月还的本金
+            var everyBen = (huanMoney - daiAllMoney * lilv / 12).toFixed(2);
+            // 计算剩下的本金
+            daiAllMoney -= everyBen;
+        }
+        document.getElementById("ben").innerHTML = daiAllMoney.toFixed(2);
+
+        // 计算租房本金+租房本金的利息 zuAllMoney
+        var zuMoney = 2200;
+        var zuAllMoney = 0; // 开始先算利息所以不用0用的2200
+
+        for (var i = 0; i < zuArr.length; i++) {
+            zuAllMoney += zuMoney;
+            var liXi = zuAllMoney * bankLiLv / 365 * 30;
+            zuAllMoney += liXi;
+        } // 租房大概本金+利息 3w元
+
+        // 计算首付58w+这几天的利息和本金 shouFuMoneyLi
+        var nowDay = new Date();
+        var dayNum = Math.ceil((nowDay.getTime() - shouFuStart.getTime()) / 1000 / 60 / 60 / 24); // 开始还款过了多少天
+        var shouFuMoneyLi = shouFu;
+        // 得到每天的本金和利息
+        for (var i = 0; i < dayNum; i++) {
+            shouFuMoneyLi += shouFuMoneyLi * (bankLiLv / 365);
+        }
+
+
+        // 不还钱每个月加入7267.17 乘以4%利息 本金和利息滚利息   benMoneyLi
+        var benMoneyLi = 0;
+        for (var i = 0; i < huanArr.length; i++) {
+            benMoneyLi += huanMoney;
+            benMoneyLi += benMoneyLi * (bankLiLv / 365);
+        }
+
+        // 我相当于不买房子, 现在手里相当于多了(算租房的)
+        // document.getElementById("mon").innerHTML = (benMoneyLi + shouFuMoneyLi + zuAllMoney).toFixed(2);
+        document.getElementById("myMon").innerHTML = (benMoneyLi + shouFuMoneyLi + zuAllMoney - shouFu).toFixed(2);
+
+        var myHourse = 89.98; // 房子面积
+        var danMoney = 23000; // 从23000开始往上加
+        // 贷款钱, 租房钱3w, 首付钱, 还过月供的本金+利息
+        // console.log(daiAllMoney, zuAllMoney, shouFuMoneyLi, benMoneyLi);
+        
+        while (true) {
+            danMoney += 1;
+            var maiMoney = myHourse * danMoney; // 卖出多钱?
+            document.getElementById("mai").innerHTML = maiMoney.toFixed(2);
+            // 先刨除各种税
+            // 3% 中介费
+            // 6.5% 房产税 (个人所得税, 营业税)
+            // 0.1% 印花税
+            // 1.5% 契税
+
+            document.getElementById("sui").innerHTML = (maiMoney * 0.03 + maiMoney * 0.065 + maiMoney * 0.016).toFixed(2);
+            maiMoney = maiMoney - (maiMoney * 0.03 + maiMoney * 0.065 + maiMoney * 0.016); // 去掉税剩下的钱
+
+            document.getElementById("dan").innerHTML = danMoney.toFixed(2);
+            
+            // 再还银行, 和还我这几年搭里算房租的 (能不能盈利?)
+            // 贷款剩余钱 - 首付的钱, 每个还的贷款+利息, 之前租房的钱
+            if ((maiMoney - daiAllMoney - shouFuMoneyLi - benMoneyLi - zuAllMoney) > 0) {
+                break;
+            }
+        }
+    </script>
+</body>
+
+</html>

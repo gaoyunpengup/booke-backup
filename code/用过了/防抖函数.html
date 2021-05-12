@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>防抖函数</title>
+    <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.js"></script>
+    <style>
+        body {
+            height: 300vh;
+        }
+    </style>
+</head>
+<body>
+<div>
+    <div id="buttonDiv">
+        <button onmouseover="debounce(btn, 1, 242)">242</button>
+        <button onmouseover="debounce(btn, 1, 252)">252</button>
+    </div>
+    <div id="content"></div>
+</div>
+<script>
+    // $.ajax({
+    //     url: "http://106.13.114.114:3000/api/bookCategoryList",
+    //     success(res) {
+    //         $("#buttonDiv").html(res['data'].reduce((str, obj) => {
+    //             return str += `<button onmouseover="debounce(btn, 1, ${obj.id})">${obj.catalog}</button>`;
+    //         }, ``))
+    //     }
+    // });
+
+    function debounce(fn, time, ...arg) {
+        // console.log(this);
+        // return function(){
+            if (fn.t === undefined) fn(...arg); // 立即执行版
+            if (fn.t !== undefined) clearTimeout(fn.t); // 如果定时器存在, 先清除
+            fn.t = setTimeout(() => { // 重新开始定时
+                console.log(1);
+                fn(...arg); // 把多个参数, 拆开传下去
+            }, time * 1000);
+        // }
+    }
+
+    // // 处理函数
+    function handle() {
+        console.log(Math.random());
+    }
+    //
+    // // 滚动事件
+    // window.addEventListener('scroll', debounce(btn, 1, 242));
+    // $("#buttonDiv>button").on("mouseover", debounce(btn, 1, 242));
+
+    function btn(id) {
+
+        $.ajax({
+            url: "http://106.13.114.114:3000/api/getBookList",
+            data: {
+                categoryId: id
+            },
+            success(res) {
+                console.log(res);
+                $("#content").html(res['data'].reduce((str, obj) => {
+                    return str += `<p>${obj['title']}</p>`;
+                }, ``))
+            }
+        })
+    }
+</script>
+
+</body>
+</html>

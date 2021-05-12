@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>多文件上传_单进度</title>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js">
+    </script>
+    <style>
+        .progress_wrap {
+            border: 1px solid black;
+            width: 300px;
+            height: 20px;
+            margin-top: 20px;
+        }
+
+        .progress {
+            height: 100%;
+            width: 0;
+            background-color: red;
+        }
+        .success{
+            background-color: greenyellow !important;
+        }
+    </style>
+</head>
+
+<body>
+    <input type="file" id="myFile" multiple>
+    <button onclick="btn()">多文件上传</button>
+    <div class="progress_wrap">
+        <div class="progress"></div>
+    </div>
+    <script>
+        // 注意进度只是发出去, 后台接没接到, 不保证
+        let progress = document.getElementsByClassName("progress")[0];
+        function btn() {
+            progress.classList.remove("success")
+            let fileArr = document.getElementById("myFile").files; // 取出文件对象
+            if (fileArr.length === 0) {
+                alert("请选择文件");
+                return;
+            }
+            let formData = new FormData();
+            Array.from(fileArr).map(file => { // 把文件拼接到表单对象上
+                formData.append("image", file);
+            })
+        
+            $.ajax({
+                url: "/uploadManyFile",
+                type: "POST",
+                data: formData,
+                processData: false,
+                contentType: false,
+                xhr: function () { // 可以增强当前Ajax
+                    let xhr = new XMLHttpRequest();
+                    xhr.upload.onprogress = updateProgress; // 接收上传过程的开始周期触发
+                    return xhr; // 一定要返回当前Ajax对象
+                }
+            })
+        }
+        function updateProgress(event) {
+            if (event.lengthComputable) { // 只读属性是一个布尔Boolean 标志，表示ProgressEvent 所关联的资源是否具有可以计算的长度。
+                var completedPercent = (event.loaded / event.total * 100).toFixed(2); // loaded已经传输字节数, total总字节数
+                progress.style.width = completedPercent + '%';
+                progress.innerHTML = completedPercent + '%';
+                if (completedPercent > 90) { //进度条变色
+                    progress.classList.add('success');
+                }
+            }
+        }
+    </script>
+</body>
+
+</html>

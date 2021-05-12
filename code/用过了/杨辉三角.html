@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>杨辉三角</title>
+</head>
+<body>
+<script>
+    // let arr = [];
+    // for (let i = 0; i < 10; i++){
+    //  let brr = [];
+    //  for (let j = 0; j <= i; j++){
+    //      brr.push(1);
+    //  }
+    //  arr.push(brr);
+    // }
+    // console.log(arr);
+
+
+    // let arr = [];
+    // for (let i = 0; i < 10; i++) {
+    //     let brr = [];
+    //     for (let j = 0; j <= i; j++) {
+    //         if (j === 0 || j === i) {
+    //             brr.push(1);
+    //         } else {
+    //             brr.push(arr[i - 1][j - 1] + arr[i - 1][j]);
+    //         }
+    //     }
+    //     arr.push(brr);
+    // }
+    // console.log(arr);
+    //
+    function fn(n, m) { // n行数, 第m个
+        if (m === 1 || n === m) { // m为开头的肯定是1, n和m相等为最后一个元素为1
+            return 1;
+        } else {
+            return fn(n - 1, m - 1) + fn(n - 1, m);
+        }
+    }
+    console.log(fn(7, 5));
+</script>
+</body>
+</html>

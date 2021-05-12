@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>节流函数</title>
+    <style>
+        html{
+            height: 300vh;
+        }
+    </style>
+</head>
+<body>
+<script>
+    function throttle(fn, time, ...arg){
+        return function() {
+            if (fn.lastTime === undefined || new Date().getTime() - fn.lastTime >= time) {
+                fn(...arg);
+                fn.lastTime = new Date().getTime();
+            }
+        }
+    }
+
+    function btn (){
+        console.log(document.documentElement.scrollTop);
+    }
+    document.addEventListener("scroll", throttle(btn, 500));
+</script>
+</body>
+</html>
